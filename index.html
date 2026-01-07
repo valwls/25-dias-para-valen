@@ -1,161 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>25 días para vos, Valen</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>25 días para vos, Valen</title>
 
-<style>
-body {
-  font-family: system-ui, sans-serif;
-  background: linear-gradient(135deg, #ffd6e0, #fff);
-  text-align: center;
-  padding: 20px;
-}
+  <!-- Tipografía cursiva -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 
-h1 {
-	color: #7a1f3d;
-	font-family: 'Great Vibes', cursive;
-	font-size: 42px;
-	font-weight: normal;
-}
-.subtitle {
-  margin-bottom: 20px;
-}
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(180deg, #fde2e4, #fadadd);
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
 
-.accordion {
-  background: #7a1f3d;
-  color: white;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  border: none;
-  border-radius: 14px;
-  margin-top: 10px;
-  font-size: 18px;
-}
+    h1 {
+      font-family: 'Playfair Display', cursive;
+      font-size: 2.4em;
+      color: #7a2e3a;
+      margin-bottom: 10px;
+    }
 
-.panel {
-  display: none;
-  background: white;
-  padding: 15px;
-  border-radius: 14px;
-  margin-top: 5px;
-  color: #333;
-}
+    p {
+      color: #6b3b44;
+      margin-bottom: 25px;
+    }
 
-.photos {
-  margin: 25px 0;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
 
-.photos img {
-  width: 100%;
-  max-width: 300px;
-  border-radius: 16px;
-  margin: 10px 0;
-}
+    button.day {
+      border: none;
+      border-radius: 15px;
+      padding: 15px 0;
+      font-size: 1.1em;
+      background: #ffffff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
 
-.music-btn {
-  background: #fff;
-  border: 2px solid #7a1f3d;
-  color: #7a1f3d;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
+    button.day:active {
+      transform: scale(0.95);
+    }
 
-.footer {
-  margin-top: 30px;
-  font-size: 14px;
-  color: #555;
-}
-</style>
+    button.locked {
+      background: #f0cfd4;
+      color: #9b6a73;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>25 días para vos, Valen 💗</h1>
-<p class="subtitle">Un pequeño detalle para recordarte lo importante que sos</p>
+  <h1>25 días para vos, Valen</h1>
+  <p>Un pequeño detalle, día por día 💕</p>
 
-<!-- BOTÓN MÚSICA -->
-<button class="music-btn" onclick="playMusic()">▶ Música para vos</button>
+  <!-- Música YouTube oculta -->
+  <iframe
+    id="ytplayer"
+    width="0"
+    height="0"
+    src="https://www.youtube.com/embed/t0Usk1CiniQ?enablejsapi=1&loop=1&playlist=t0Usk1CiniQ"
+    frameborder="0"
+    allow="autoplay"
+  ></iframe>
 
-<audio id="music" loop autoplay muted>
-  <source src="https://youtu.be/t0Usk1CiniQ?si=-mrD93wYvAma6p4N.mp3" type="audio/mpeg">
-</audio>
+  <!-- Calendario -->
+  <div class="grid" id="calendar"></div>
 
-<script>
-function playMusic() {
-  document.getElementById("music").play();
-}
+  <script>
+    // 📅 FECHA DE INICIO: 7 de enero de 2026
+    const startDate = new Date(2026, 0, 7);
 
-const mensajes = [
-"Arranco este calendario recordándote algo simple: me hacés muy bien, Valen.",
-"Pensarte me calma.",
-"Si hoy fue un día pesado, acá estoy.",
-"Gracias por existir como sos.",
-"Sos una casualidad hermosa.",
-"Me gustás incluso en tus silencios.",
-"Vale por un abrazo largo.",
-"Pensé en vos sin querer.",
-"Estás en mis días.",
-"Me gusta disfrutar con vos.",
-"Sos tranquilidad.",
-"Gracias por quedarte cuando estoy mal.",
-"Me hacés sentir protegida.",
-"Hay personas lindas… y después estás vos.",
-"Te elijo incluso en tus días grises.",
-"Sos parte de mí vida.",
-"Me gusta cuidarte.",
-"Me preocupas.",
-"Gracias por tanto.",
-"Me acompañás incluso sin saberlo.",
-"Sos refugio.",
-"Sos risa.",
-"Sos calma.",
-"Sos importante.",
-"Este calendario termina, pero lo que siento por vos no 💗"
-];
+    // 💌 MENSAJES
+    const messages = [
+      "Arranco este calendario recordándote algo simple: me hacés muy bien, Valen.",
+      "Pensarte me calma.",
+      "Si hoy fue un día pesado, acá estoy.",
+      "Gracias por existir como sos.",
+      "Sos una casualidad hermosa.",
+      "Me gustás incluso en tus silencios.",
+      "Vale por un abrazo largo.",
+      "Pensé en vos sin querer.",
+      "Estás en mis días.",
+      "Me gusta disfrutar con vos.",
+      "Sos tranquilidad.",
+      "Gracias por quedarte cuando estoy mal.",
+      "Me hacés sentir protegida.",
+      "Hay personas lindas… y después estás vos.",
+      "Te elijo incluso en tus días grises.",
+      "Sos parte de mí vida.",
+      "Me gusta cuidarte.",
+      "Me preocupas.",
+      "Gracias por tanto.",
+      "Me acompañás incluso sin saberlo.",
+      "Sos refugio.",
+      "Sos risa.",
+      "Sos calma.",
+      "Sos importante.",
+      "Este calendario termina, pero lo que siento por vos no 💗"
+    ];
 
-for (let i = 0; i < 25; i++) {
-  document.write(`
-    <button class="accordion">Día ${i + 1}</button>
-    <div class="panel"><p>${mensajes[i]}</p></div>
-  `);
-}
-</script>
+    const calendar = document.getElementById("calendar");
 
-<script>
-const music = document.getElementById("music");
-let musicStarted = false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-for (let i = 0; i < acc.length; i++) {
-	acc[i].addEventListener("click", function() {
-		
-		if (this.classList.contains("locked")) {
-			alert("Todavía no es este día 💭");
-			return;
-		}
-		
-		if (!musicStarted) {
-			music.muted = false;
-			music.play();
-			musicStarted = true;
-		}
-		
-		const panel = this.nextElementSibling;
-		panel.style.display =
-			panel.style.display === "block" ? "none" : "block";
-	});
-}
-</script>
+    for (let i = 0; i < 25; i++) {
+      const dayDate = new Date(startDate);
+      dayDate.setDate(startDate.getDate() + i);
 
-<div class="footer">
-Hecho con amor para Valen 🤍
-</div>
+      const button = document.createElement("button");
+      button.className = "day";
+      button.textContent = i + 1;
+
+      if (today >= dayDate) {
+        button.onclick = () => {
+          alert(messages[i]);
+        };
+      } else {
+        button.classList.add("locked");
+      }
+
+      calendar.appendChild(button);
+    }
+
+    // 🎵 Música: arranca al primer toque (Android + iPhone)
+    let musicStarted = false;
+    document.addEventListener("click", () => {
+      if (!musicStarted) {
+        const iframe = document.getElementById("ytplayer");
+        iframe.contentWindow.postMessage(
+          '{"event":"command","func":"playVideo","args":""}',
+          "*"
+        );
+        musicStarted = true;
+      }
+    });
+  </script>
 
 </body>
 </html>
